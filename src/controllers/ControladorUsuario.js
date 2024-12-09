@@ -2,10 +2,11 @@ import jwt from 'jsonwebtoken';
 import Usuario from '../models/Usuario.js';
 
 export const login = async (req, res) => {
-  const { email, password, rol } = req.body;
+  const { email, password } = req.body; 
 
   try {
-    const usuario = await Usuario.findOne({ email, rol });
+
+    const usuario = await Usuario.findOne({ email });
 
     if (!usuario) {
       return res.status(404).json({ message: 'Usuario no encontrado' });
@@ -17,10 +18,11 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
 
+
     const token = jwt.sign(
       {
         id: usuario._id,
-        rol: usuario.rol,
+        rol: usuario.rol, 
         email: usuario.email,
       },
       process.env.JWT_SECRET,
@@ -42,11 +44,12 @@ export const login = async (req, res) => {
   }
 };
 
+
 export const cambiarPassword = async (req, res) => {
-  const { email, antContraseña, nuevaContraseña, confirmarContraseña, rol } = req.body;
+  const { email, antContraseña, nuevaContraseña, confirmarContraseña } = req.body; // Eliminamos rol
 
   try {
-    const usuario = await Usuario.findOne({ email, rol });
+    const usuario = await Usuario.findOne({ email });
 
     if (!usuario) {
       return res.status(404).json({ message: 'Usuario no encontrado' });
@@ -61,7 +64,6 @@ export const cambiarPassword = async (req, res) => {
     if (nuevaContraseña !== confirmarContraseña) {
       return res.status(400).json({ message: 'Las contraseñas no coinciden' });
     }
-
     usuario.password = nuevaContraseña;
     await usuario.save();
 
