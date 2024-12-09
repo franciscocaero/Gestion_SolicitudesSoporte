@@ -3,6 +3,9 @@ import connection from './database.js';
 
 connection();
 
+export default (req, res) => {
+  app(req, res);
+};
 
 const PORT = process.env.PORT || 3000;
 
