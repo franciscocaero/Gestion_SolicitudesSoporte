@@ -5,9 +5,7 @@ import connection from './database.js';
 connection();
 
 
-export default (req, res) => {
-  app(req, res);
-};
+export const handler = serverless(app);
 
 if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 3000;
